@@ -15,7 +15,9 @@ const decreaseFont = document.getElementById("decreaseFont");
 let fontSize =
   Number(localStorage.getItem("fontSize")) || 100;
 
-const book = ePub("./library/sample.epub");
+const book = ePub(
+  "https://archive.org/download/sample_202605/Sample.epub"
+);
 
 const rendition = book.renderTo("viewer", {
   width: "100%",
