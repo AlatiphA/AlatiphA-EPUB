@@ -7,7 +7,7 @@ const FILES_TO_CACHE = [
   "./style.css",
   "./app.js",
   "./manifest.json",
-  "./library/sample.epub"
+  "../library/sample.epub"
 
 ];
 
