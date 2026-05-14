@@ -15,9 +15,7 @@ const decreaseFont = document.getElementById("decreaseFont");
 let fontSize =
   Number(localStorage.getItem("fontSize")) || 100;
 
-const book = ePub(
-  "https://s3.amazonaws.com/moby-dick/OPS/package.opf"
-);
+const book = ePub("./library/sample.epub");
 
 const rendition = book.renderTo("viewer", {
   width: "100%",
