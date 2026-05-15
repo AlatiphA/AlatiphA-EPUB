@@ -80,16 +80,20 @@ async function loadBook() {
 function startReader() {
 
   rendition =
-    book.renderTo("viewer", {
+  book.renderTo("viewer", {
 
-      width: "100%",
-      height: "100%",
-      spread: "none",
+    width: "100%",
+    height: "100%",
 
-      manager: "continuous",
-      flow: "scrolled"
+    spread: "none",
 
-    });
+    manager: "default",
+
+    flow: "paginated",
+
+    snap: true
+
+  });
 
   const savedLocation =
     localStorage.getItem(
@@ -355,43 +359,6 @@ decreaseFont.addEventListener(
     );
 
   }
-);
-
-viewer.addEventListener(
-  "wheel",
-  e => {
-
-    if (!e.ctrlKey) return;
-
-    e.preventDefault();
-
-    if (e.deltaY < 0) {
-
-      zoomLevel += 0.1;
-
-    } else {
-
-      zoomLevel -= 0.1;
-
-    }
-
-    if (zoomLevel < 0.5) {
-      zoomLevel = 0.5;
-    }
-
-    if (zoomLevel > 3) {
-      zoomLevel = 3;
-    }
-
-    localStorage.setItem(
-      "zoomLevel",
-      zoomLevel
-    );
-
-    applyZoom();
-
-  },
-  { passive: false }
 );
 
 let touchStartX = 0;
