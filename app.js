@@ -99,6 +99,58 @@ function startReader() {
     savedLocation || undefined
   );
 
+
+  rendition.on("rendered", () => {
+
+  const iframe =
+    viewer.querySelector("iframe");
+
+  if (!iframe) return;
+
+  const iframeDoc =
+    iframe.contentDocument;
+
+  let touchStartX = 0;
+
+  iframeDoc.addEventListener(
+    "touchstart",
+    e => {
+
+      touchStartX =
+        e.changedTouches[0].screenX;
+
+    },
+    { passive: true }
+  );
+
+  iframeDoc.addEventListener(
+    "touchend",
+    e => {
+
+      const touchEndX =
+        e.changedTouches[0].screenX;
+
+      const difference =
+        touchStartX - touchEndX;
+
+      if (difference > 50) {
+
+        rendition.next();
+
+      }
+
+      if (difference < -50) {
+
+        rendition.prev();
+
+      }
+
+    },
+    { passive: true }
+  );
+
+});
+
   rendition.themes.fontSize(
     fontSize + "%"
   );
@@ -344,55 +396,6 @@ decreaseFont.addEventListener(
   }
 );
 
-let touchStartX = 0;
-let touchEndX = 0;
-
-viewer.addEventListener(
-  "touchstart",
-  e => {
-
-    touchStartX =
-      e.changedTouches[0].screenX;
-
-  }
-);
-
-viewer.addEventListener(
-  "touchend",
-  e => {
-
-    touchEndX =
-      e.changedTouches[0].screenX;
-
-    handleSwipe();
-
-  }
-);
-
-function handleSwipe() {
-
-  const difference =
-    touchStartX - touchEndX;
-
-  if (
-    difference > 50 &&
-    rendition
-  ) {
-
-    rendition.next();
-
-  }
-
-  if (
-    difference < -50 &&
-    rendition
-  ) {
-
-    rendition.prev();
-
-  }
-
-}
 
 if (
   "serviceWorker" in navigator
