@@ -15,9 +15,39 @@ const decreaseFont = document.getElementById("decreaseFont");
 let fontSize =
   Number(localStorage.getItem("fontSize")) || 100;
 
-const book = ePub(
-  "https://archive.org/download/sample_202605/Sample.epub"
-);
+async function loadBook() {
+
+  try {
+
+    const response = await fetch(
+      "./library/sample.epub"
+    );
+
+    if (!response.ok) {
+
+      throw new Error(
+        "EPUB file not found."
+      );
+
+    }
+
+    const blob = await response.blob();
+
+    const book = ePub(blob);
+
+    startReader(book);
+
+  } catch (error) {
+
+    alert(error.message);
+
+    console.error(error);
+
+  }
+
+}
+
+loadBook();
 
 const rendition = book.renderTo("viewer", {
   width: "100%",
