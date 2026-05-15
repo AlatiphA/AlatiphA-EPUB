@@ -108,8 +108,6 @@ function startReader() {
     fontSize + "%"
   );
 
-  applyZoom();
-
   applyTheme();
 
   book.ready
@@ -246,16 +244,6 @@ function applyTheme() {
     });
 
   }
-
-}
-
-function applyZoom() {
-
-  viewer.style.transform =
-    `scale(${zoomLevel})`;
-
-  viewer.style.transformOrigin =
-    "top center";
 
 }
 
