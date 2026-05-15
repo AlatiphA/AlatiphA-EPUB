@@ -33,8 +33,12 @@ let book;
 
 let fontSize =
   Number(
-    localStorage.getItem("fontSize")
+    localStorage.getItem(
+      "fontSize"
+    )
   ) || 100;
+
+let touchStartX = 0;
 
 async function loadBook() {
 
@@ -75,20 +79,24 @@ async function loadBook() {
 function startReader() {
 
   rendition =
-  book.renderTo("viewer", {
+    book.renderTo(
+      "viewer",
+      {
 
-    width: "100%",
-    height: "100%",
+        width: "100%",
 
-    spread: "none",
+        height: "100%",
 
-    manager: "default",
+        spread: "none",
 
-    flow: "paginated",
+        manager: "default",
 
-    snap: true
+        flow: "paginated",
 
-  });
+        snap: true
+
+      }
+    );
 
   const savedLocation =
     localStorage.getItem(
@@ -99,63 +107,13 @@ function startReader() {
     savedLocation || undefined
   );
 
-
-  rendition.on("rendered", () => {
-
-  const iframe =
-    viewer.querySelector("iframe");
-
-  if (!iframe) return;
-
-  const iframeDoc =
-    iframe.contentDocument;
-
-  let touchStartX = 0;
-
-  iframeDoc.addEventListener(
-    "touchstart",
-    e => {
-
-      touchStartX =
-        e.changedTouches[0].screenX;
-
-    },
-    { passive: true }
-  );
-
-  iframeDoc.addEventListener(
-    "touchend",
-    e => {
-
-      const touchEndX =
-        e.changedTouches[0].screenX;
-
-      const difference =
-        touchStartX - touchEndX;
-
-      if (difference > 50) {
-
-        rendition.next();
-
-      }
-
-      if (difference < -50) {
-
-        rendition.prev();
-
-      }
-
-    },
-    { passive: true }
-  );
-
-});
-
   rendition.themes.fontSize(
     fontSize + "%"
   );
 
   applyTheme();
+
+  setupSwipeNavigation();
 
   book.ready
     .then(async () => {
@@ -169,21 +127,14 @@ function startReader() {
         chapter => {
 
           const link =
-            document.createElement("a");
+            document.createElement(
+              "a"
+            );
 
           link.textContent =
             chapter.label;
 
           link.href = "#";
-
-          link.style.display =
-            "block";
-
-          link.style.padding =
-            "12px";
-
-          link.style.cursor =
-            "pointer";
 
           link.addEventListener(
             "click",
@@ -256,6 +207,73 @@ function startReader() {
 
 }
 
+function setupSwipeNavigation() {
+
+  rendition.on(
+    "rendered",
+    () => {
+
+      const iframe =
+        viewer.querySelector(
+          "iframe"
+        );
+
+      if (!iframe) return;
+
+      const iframeDoc =
+        iframe.contentDocument;
+
+      iframeDoc.addEventListener(
+        "touchstart",
+        e => {
+
+          touchStartX =
+            e.changedTouches[0]
+              .screenX;
+
+        },
+        {
+          passive: true,
+          once: true
+        }
+      );
+
+      iframeDoc.addEventListener(
+        "touchend",
+        e => {
+
+          const touchEndX =
+            e.changedTouches[0]
+              .screenX;
+
+          const difference =
+            touchStartX -
+            touchEndX;
+
+          if (difference > 50) {
+
+            rendition.next();
+
+          }
+
+          if (difference < -50) {
+
+            rendition.prev();
+
+          }
+
+        },
+        {
+          passive: true,
+          once: true
+        }
+      );
+
+    }
+  );
+
+}
+
 function applyTheme() {
 
   const darkMode =
@@ -284,7 +302,12 @@ function applyTheme() {
             ? "#fff"
             : "#000",
 
-        padding: "20px"
+        padding: "20px",
+
+        "line-height": "1.7",
+
+        "font-family":
+          "Arial, sans-serif"
 
       }
 
@@ -396,7 +419,6 @@ decreaseFont.addEventListener(
   }
 );
 
-
 if (
   "serviceWorker" in navigator
 ) {
@@ -409,11 +431,15 @@ if (
 
         await navigator
           .serviceWorker
-          .register("./sw.js");
+          .register(
+            "./sw.js"
+          );
 
       } catch (error) {
 
-        console.error(error);
+        console.error(
+          error
+        );
 
       }
 
