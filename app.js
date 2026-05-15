@@ -36,11 +36,6 @@ let fontSize =
     localStorage.getItem("fontSize")
   ) || 100;
 
-let zoomLevel =
-  Number(
-    localStorage.getItem("zoomLevel")
-  ) || 1;
-
 async function loadBook() {
 
   try {
