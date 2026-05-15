@@ -36,6 +36,11 @@ let fontSize =
     localStorage.getItem("fontSize")
   ) || 100;
 
+let zoomLevel =
+  Number(
+    localStorage.getItem("zoomLevel")
+  ) || 1;
+
 async function loadBook() {
 
   try {
@@ -79,7 +84,10 @@ function startReader() {
 
       width: "100%",
       height: "100%",
-      spread: "none"
+      spread: "none",
+
+      manager: "continuous",
+      flow: "scrolled"
 
     });
 
@@ -96,15 +104,17 @@ function startReader() {
     fontSize + "%"
   );
 
+  applyZoom();
+
   applyTheme();
 
   book.ready
-    .then(() => {
+    .then(async () => {
+
+      toc.innerHTML = "";
 
       const navigation =
         book.navigation;
-
-      toc.innerHTML = "";
 
       navigation.toc.forEach(
         chapter => {
@@ -116,6 +126,15 @@ function startReader() {
             chapter.label;
 
           link.href = "#";
+
+          link.style.display =
+            "block";
+
+          link.style.padding =
+            "12px";
+
+          link.style.cursor =
+            "pointer";
 
           link.addEventListener(
             "click",
@@ -139,7 +158,7 @@ function startReader() {
         }
       );
 
-      return book.locations.generate(
+      await book.locations.generate(
         1000
       );
 
@@ -147,7 +166,7 @@ function startReader() {
     .catch(error => {
 
       console.error(
-        "Book setup error:",
+        "Navigation error:",
         error
       );
 
@@ -179,10 +198,7 @@ function startReader() {
 
       } catch (error) {
 
-        console.error(
-          "Progress error:",
-          error
-        );
+        console.error(error);
 
       }
 
@@ -217,13 +233,25 @@ function applyTheme() {
         color:
           darkMode
             ? "#fff"
-            : "#000"
+            : "#000",
+
+        padding: "20px"
 
       }
 
     });
 
   }
+
+}
+
+function applyZoom() {
+
+  viewer.style.transform =
+    `scale(${zoomLevel})`;
+
+  viewer.style.transformOrigin =
+    "top center";
 
 }
 
@@ -262,7 +290,9 @@ nextPage.addEventListener(
   () => {
 
     if (rendition) {
+
       rendition.next();
+
     }
 
   }
@@ -273,7 +303,9 @@ prevPage.addEventListener(
   () => {
 
     if (rendition) {
+
       rendition.prev();
+
     }
 
   }
@@ -323,6 +355,43 @@ decreaseFont.addEventListener(
     );
 
   }
+);
+
+viewer.addEventListener(
+  "wheel",
+  e => {
+
+    if (!e.ctrlKey) return;
+
+    e.preventDefault();
+
+    if (e.deltaY < 0) {
+
+      zoomLevel += 0.1;
+
+    } else {
+
+      zoomLevel -= 0.1;
+
+    }
+
+    if (zoomLevel < 0.5) {
+      zoomLevel = 0.5;
+    }
+
+    if (zoomLevel > 3) {
+      zoomLevel = 3;
+    }
+
+    localStorage.setItem(
+      "zoomLevel",
+      zoomLevel
+    );
+
+    applyZoom();
+
+  },
+  { passive: false }
 );
 
 let touchStartX = 0;
@@ -389,16 +458,9 @@ if (
           .serviceWorker
           .register("./sw.js");
 
-        console.log(
-          "Service Worker Registered"
-        );
-
       } catch (error) {
 
-        console.error(
-          "SW Error:",
-          error
-        );
+        console.error(error);
 
       }
 
