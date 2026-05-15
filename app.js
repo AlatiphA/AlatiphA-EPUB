@@ -1,27 +1,49 @@
-const viewer = document.getElementById("viewer");
-const toc = document.getElementById("toc");
-const progressText = document.getElementById("progressText");
-const sidebar = document.getElementById("sidebar");
+const viewer =
+  document.getElementById("viewer");
 
-const menuBtn = document.getElementById("menuBtn");
-const themeBtn = document.getElementById("themeBtn");
+const toc =
+  document.getElementById("toc");
 
-const nextPage = document.getElementById("nextPage");
-const prevPage = document.getElementById("prevPage");
+const progressText =
+  document.getElementById("progressText");
 
-const increaseFont = document.getElementById("increaseFont");
-const decreaseFont = document.getElementById("decreaseFont");
+const sidebar =
+  document.getElementById("sidebar");
+
+const menuBtn =
+  document.getElementById("menuBtn");
+
+const themeBtn =
+  document.getElementById("themeBtn");
+
+const nextPage =
+  document.getElementById("nextPage");
+
+const prevPage =
+  document.getElementById("prevPage");
+
+const increaseFont =
+  document.getElementById("increaseFont");
+
+const decreaseFont =
+  document.getElementById("decreaseFont");
+
+let rendition;
+let book;
 
 let fontSize =
-  Number(localStorage.getItem("fontSize")) || 100;
+  Number(
+    localStorage.getItem("fontSize")
+  ) || 100;
 
 async function loadBook() {
 
   try {
 
-    const response = await fetch(
-      "./library/sample.epub"
-    );
+    const response =
+      await fetch(
+        "./library/sample.epub"
+      );
 
     if (!response.ok) {
 
@@ -31,227 +53,358 @@ async function loadBook() {
 
     }
 
-    const blob = await response.blob();
+    const blob =
+      await response.blob();
 
-    const book = ePub(blob);
+    book = ePub(blob);
 
-    startReader(book);
+    startReader();
 
   } catch (error) {
 
-    alert(error.message);
-
     console.error(error);
+
+    alert(
+      "Failed to load EPUB."
+    );
 
   }
 
 }
 
-loadBook();
+function startReader() {
 
-const rendition = book.renderTo("viewer", {
-  width: "100%",
-  height: "100%",
-  spread: "none"
-});
+  rendition =
+    book.renderTo("viewer", {
 
-const savedLocation =
-  localStorage.getItem("epub-location");
-
-rendition.display(savedLocation || undefined);
-
-rendition.themes.fontSize(fontSize + "%");
-
-book.ready
-  .then(() => {
-
-    const navigation = book.navigation;
-
-    navigation.toc.forEach(chapter => {
-
-      const link = document.createElement("a");
-
-      link.textContent = chapter.label;
-
-      link.href = "#";
-
-      link.addEventListener("click", e => {
-
-        e.preventDefault();
-
-        rendition.display(chapter.href);
-
-        sidebar.classList.remove("active");
-      });
-
-      toc.appendChild(link);
+      width: "100%",
+      height: "100%",
+      spread: "none"
 
     });
 
-  })
-  .catch(error => {
-    console.error("Book navigation error:", error);
-  });
+  const savedLocation =
+    localStorage.getItem(
+      "epub-location"
+    );
 
-nextPage.addEventListener("click", () => {
-  rendition.next();
-});
+  rendition.display(
+    savedLocation || undefined
+  );
 
-prevPage.addEventListener("click", () => {
-  rendition.prev();
-});
+  rendition.themes.fontSize(
+    fontSize + "%"
+  );
 
-menuBtn.addEventListener("click", () => {
-  sidebar.classList.toggle("active");
-});
+  applyTheme();
 
-increaseFont.addEventListener("click", () => {
+  book.ready
+    .then(() => {
 
-  fontSize += 10;
+      const navigation =
+        book.navigation;
 
-  rendition.themes.fontSize(fontSize + "%");
+      toc.innerHTML = "";
 
-  localStorage.setItem("fontSize", fontSize);
+      navigation.toc.forEach(
+        chapter => {
 
-});
+          const link =
+            document.createElement("a");
 
-decreaseFont.addEventListener("click", () => {
+          link.textContent =
+            chapter.label;
 
-  if (fontSize <= 70) return;
+          link.href = "#";
 
-  fontSize -= 10;
+          link.addEventListener(
+            "click",
+            e => {
 
-  rendition.themes.fontSize(fontSize + "%");
+              e.preventDefault();
 
-  localStorage.setItem("fontSize", fontSize);
+              rendition.display(
+                chapter.href
+              );
 
-});
+              sidebar.classList.remove(
+                "active"
+              );
+
+            }
+          );
+
+          toc.appendChild(link);
+
+        }
+      );
+
+      return book.locations.generate(
+        1000
+      );
+
+    })
+    .catch(error => {
+
+      console.error(
+        "Book setup error:",
+        error
+      );
+
+    });
+
+  rendition.on(
+    "relocated",
+    location => {
+
+      try {
+
+        const percentage =
+          book.locations.percentageFromCfi(
+            location.start.cfi
+          );
+
+        const percent =
+          Math.floor(
+            percentage * 100
+          );
+
+        progressText.textContent =
+          percent + "%";
+
+        localStorage.setItem(
+          "epub-location",
+          location.start.cfi
+        );
+
+      } catch (error) {
+
+        console.error(
+          "Progress error:",
+          error
+        );
+
+      }
+
+    }
+  );
+
+}
 
 function applyTheme() {
 
   const darkMode =
-    localStorage.getItem("darkMode") === "true";
+    localStorage.getItem(
+      "darkMode"
+    ) === "true";
 
-  document.body.classList.toggle("dark", darkMode);
+  document.body.classList.toggle(
+    "dark",
+    darkMode
+  );
 
-  rendition.themes.default({
-    body: {
-      background: darkMode ? "#111" : "#fff",
-      color: darkMode ? "#fff" : "#000"
-    }
-  });
+  if (rendition) {
 
-}
+    rendition.themes.default({
 
-applyTheme();
+      body: {
 
-themeBtn.addEventListener("click", () => {
+        background:
+          darkMode
+            ? "#111"
+            : "#fff",
 
-  const darkMode =
-    localStorage.getItem("darkMode") === "true";
+        color:
+          darkMode
+            ? "#fff"
+            : "#000"
 
-  localStorage.setItem("darkMode", !darkMode);
+      }
 
-  applyTheme();
-
-});
-
-book.ready
-  .then(() => {
-    return book.locations.generate(1000);
-  })
-  .catch(error => {
-    console.error("Location generation error:", error);
-  });
-
-rendition.on("relocated", location => {
-
-  try {
-
-    const percentage =
-      book.locations.percentageFromCfi(
-        location.start.cfi
-      );
-
-    const percent =
-      Math.floor(percentage * 100);
-
-    progressText.textContent =
-      percent + "%";
-
-    localStorage.setItem(
-      "epub-location",
-      location.start.cfi
-    );
-
-  } catch (error) {
-
-    console.error(
-      "Progress calculation error:",
-      error
-    );
+    });
 
   }
 
-});
+}
+
+menuBtn.addEventListener(
+  "click",
+  () => {
+
+    sidebar.classList.toggle(
+      "active"
+    );
+
+  }
+);
+
+themeBtn.addEventListener(
+  "click",
+  () => {
+
+    const darkMode =
+      localStorage.getItem(
+        "darkMode"
+      ) === "true";
+
+    localStorage.setItem(
+      "darkMode",
+      !darkMode
+    );
+
+    applyTheme();
+
+  }
+);
+
+nextPage.addEventListener(
+  "click",
+  () => {
+
+    if (rendition) {
+      rendition.next();
+    }
+
+  }
+);
+
+prevPage.addEventListener(
+  "click",
+  () => {
+
+    if (rendition) {
+      rendition.prev();
+    }
+
+  }
+);
+
+increaseFont.addEventListener(
+  "click",
+  () => {
+
+    fontSize += 10;
+
+    if (rendition) {
+
+      rendition.themes.fontSize(
+        fontSize + "%"
+      );
+
+    }
+
+    localStorage.setItem(
+      "fontSize",
+      fontSize
+    );
+
+  }
+);
+
+decreaseFont.addEventListener(
+  "click",
+  () => {
+
+    if (fontSize <= 70) return;
+
+    fontSize -= 10;
+
+    if (rendition) {
+
+      rendition.themes.fontSize(
+        fontSize + "%"
+      );
+
+    }
+
+    localStorage.setItem(
+      "fontSize",
+      fontSize
+    );
+
+  }
+);
 
 let touchStartX = 0;
 let touchEndX = 0;
 
-viewer.addEventListener("touchstart", e => {
+viewer.addEventListener(
+  "touchstart",
+  e => {
 
-  touchStartX =
-    e.changedTouches[0].screenX;
+    touchStartX =
+      e.changedTouches[0].screenX;
 
-});
+  }
+);
 
-viewer.addEventListener("touchend", e => {
+viewer.addEventListener(
+  "touchend",
+  e => {
 
-  touchEndX =
-    e.changedTouches[0].screenX;
+    touchEndX =
+      e.changedTouches[0].screenX;
 
-  handleSwipe();
+    handleSwipe();
 
-});
+  }
+);
 
 function handleSwipe() {
 
   const difference =
     touchStartX - touchEndX;
 
-  if (difference > 50) {
+  if (
+    difference > 50 &&
+    rendition
+  ) {
+
     rendition.next();
+
   }
 
-  if (difference < -50) {
+  if (
+    difference < -50 &&
+    rendition
+  ) {
+
     rendition.prev();
+
   }
 
 }
 
-if ("serviceWorker" in navigator) {
+if (
+  "serviceWorker" in navigator
+) {
 
-  window.addEventListener("load", async () => {
+  window.addEventListener(
+    "load",
+    async () => {
 
-    try {
+      try {
 
-      await navigator.serviceWorker.register(
-        "./sw.js"
-      );
+        await navigator
+          .serviceWorker
+          .register("./sw.js");
 
-      console.log(
-        "Service Worker Registered"
-      );
+        console.log(
+          "Service Worker Registered"
+        );
 
-    } catch (error) {
+      } catch (error) {
 
-      console.error(
-        "Service Worker Failed:",
-        error
-      );
+        console.error(
+          "SW Error:",
+          error
+        );
+
+      }
 
     }
-
-  });
+  );
 
 }
+
+loadBook();
