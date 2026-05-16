@@ -256,4 +256,30 @@ footer {
   z-index: 9999;
 }
 
+  #navOverlay {
+  position: absolute;
+
+  inset: 0;
+
+  display: flex;
+
+  z-index: 5000;
+}
+
+.navZone {
+  height: 100%;
+}
+
+#leftZone {
+  width: 30%;
+}
+
+#centerZone {
+  width: 40%;
+}
+
+#rightZone {
+  width: 30%;
+}
+
 }
