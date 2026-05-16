@@ -211,7 +211,7 @@ function setupSwipeNavigation() {
 
   rendition.on(
     "rendered",
-    () => {
+    section => {
 
       const iframe =
         viewer.querySelector(
@@ -220,15 +220,14 @@ function setupSwipeNavigation() {
 
       if (!iframe) return;
 
-      const iframeDoc =
-        iframe.contentDocument;
+      const iframeWindow =
+        iframe.contentWindow;
 
-      iframeDoc.addEventListener(
-        "click",
+      iframeWindow.onclick =
         e => {
 
           const width =
-            window.innerWidth;
+            iframeWindow.innerWidth;
 
           const x =
             e.clientX;
@@ -247,11 +246,59 @@ function setupSwipeNavigation() {
 
           }
 
-        }
-      );
+          else {
+
+            toggleControls();
+
+          }
+
+        };
 
     }
   );
+
+}
+
+function toggleControls() {
+
+  const header =
+    document.querySelector(
+      "header"
+    );
+
+  const footer =
+    document.querySelector(
+      "footer"
+    );
+
+  const hidden =
+    header.classList.contains(
+      "hideControls"
+    );
+
+  if (hidden) {
+
+    header.classList.remove(
+      "hideControls"
+    );
+
+    footer.classList.remove(
+      "hideControls"
+    );
+
+  }
+
+  else {
+
+    header.classList.add(
+      "hideControls"
+    );
+
+    footer.classList.add(
+      "hideControls"
+    );
+
+  }
 
 }
 
