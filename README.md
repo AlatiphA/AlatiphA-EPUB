@@ -1,2 +1,2 @@
 # AlatiphA-EPUB
-EPUB Reader 
+Installable EPUB Reader 
