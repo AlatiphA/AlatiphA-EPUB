@@ -125,8 +125,6 @@ function startReader() {
 
   applyTheme();
 
-  setupNavigationZones();
-
   book.ready
     .then(async () => {
 
@@ -223,52 +221,6 @@ function startReader() {
 
 }
 
-function setupNavigationZones() {
-
-  viewer.addEventListener(
-    "pointerup",
-    handleViewerTap
-  );
-
-}
-
-function handleViewerTap(e) {
-
-  const rect =
-    viewer.getBoundingClientRect();
-
-  const x =
-    e.clientX - rect.left;
-
-  const width =
-    rect.width;
-
-  const leftZone =
-    width * 0.3;
-
-  const rightZone =
-    width * 0.7;
-
-  if (x <= leftZone) {
-
-    rendition.prev();
-
-    return;
-
-  }
-
-  if (x >= rightZone) {
-
-    rendition.next();
-
-    return;
-
-  }
-
-  toggleControls();
-
-}
-
 function toggleControls() {
 
   controlsVisible =
@@ -299,6 +251,54 @@ function toggleControls() {
   }
 
 }
+
+const leftZone =
+  document.getElementById(
+    "leftZone"
+  );
+
+const centerZone =
+  document.getElementById(
+    "centerZone"
+  );
+
+const rightZone =
+  document.getElementById(
+    "rightZone"
+  );
+
+leftZone.addEventListener(
+  "click",
+  e => {
+
+    e.stopPropagation();
+
+    rendition.prev();
+
+  }
+);
+
+rightZone.addEventListener(
+  "click",
+  e => {
+
+    e.stopPropagation();
+
+    rendition.next();
+
+  }
+);
+
+centerZone.addEventListener(
+  "click",
+  e => {
+
+    e.stopPropagation();
+
+    toggleControls();
+
+  }
+);
 
 function applyTheme() {
 
