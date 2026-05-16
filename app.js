@@ -28,6 +28,16 @@ const increaseFont =
 const decreaseFont =
   document.getElementById("decreaseFont");
 
+const header =
+  document.querySelector(
+    "header"
+  );
+
+const footer =
+  document.querySelector(
+    "footer"
+  );
+
 let rendition;
 let book;
 
@@ -38,7 +48,7 @@ let fontSize =
     )
   ) || 100;
 
-let touchStartX = 0;
+let controlsVisible = true;
 
 async function loadBook() {
 
@@ -64,7 +74,9 @@ async function loadBook() {
 
     startReader();
 
-  } catch (error) {
+  }
+
+  catch (error) {
 
     console.error(error);
 
@@ -113,7 +125,7 @@ function startReader() {
 
   applyTheme();
 
-  setupSwipeNavigation();
+  setupNavigationZones();
 
   book.ready
     .then(async () => {
@@ -166,7 +178,6 @@ function startReader() {
     .catch(error => {
 
       console.error(
-        "Navigation error:",
         error
       );
 
@@ -179,9 +190,10 @@ function startReader() {
       try {
 
         const percentage =
-          book.locations.percentageFromCfi(
-            location.start.cfi
-          );
+          book.locations
+            .percentageFromCfi(
+              location.start.cfi
+            );
 
         const percent =
           Math.floor(
@@ -196,9 +208,13 @@ function startReader() {
           location.start.cfi
         );
 
-      } catch (error) {
+      }
 
-        console.error(error);
+      catch (error) {
+
+        console.error(
+          error
+        );
 
       }
 
@@ -207,80 +223,58 @@ function startReader() {
 
 }
 
-function setupSwipeNavigation() {
+function setupNavigationZones() {
 
-  rendition.on(
-    "rendered",
-    () => {
-
-      const iframe =
-        viewer.querySelector(
-          "iframe"
-        );
-
-      if (!iframe) return;
-
-      const iframeWindow =
-        iframe.contentWindow;
-
-      iframeWindow.onpointerup =
-        e => {
-
-          const width =
-            iframeWindow.innerWidth;
-
-          const x =
-            e.clientX;
-
-          const leftZone =
-            width * 0.3;
-
-          const rightZone =
-            width * 0.7;
-
-          if (x <= leftZone) {
-
-            rendition.prev();
-
-            return;
-
-          }
-
-          if (x >= rightZone) {
-
-            rendition.next();
-
-            return;
-
-          }
-
-          toggleControls();
-
-        };
-
-    }
+  viewer.addEventListener(
+    "pointerup",
+    handleViewerTap
   );
+
+}
+
+function handleViewerTap(e) {
+
+  const rect =
+    viewer.getBoundingClientRect();
+
+  const x =
+    e.clientX - rect.left;
+
+  const width =
+    rect.width;
+
+  const leftZone =
+    width * 0.3;
+
+  const rightZone =
+    width * 0.7;
+
+  if (x <= leftZone) {
+
+    rendition.prev();
+
+    return;
+
+  }
+
+  if (x >= rightZone) {
+
+    rendition.next();
+
+    return;
+
+  }
+
+  toggleControls();
 
 }
 
 function toggleControls() {
 
-  const header =
-    document.querySelector(
-      "header"
-    );
+  controlsVisible =
+    !controlsVisible;
 
-  const footer =
-    document.querySelector(
-      "footer"
-    );
-
-  const hidden =
-    header.classList.contains(
-      "hideControls"
-    );
-
-  if (hidden) {
+  if (controlsVisible) {
 
     header.classList.remove(
       "hideControls"
@@ -383,11 +377,7 @@ nextPage.addEventListener(
   "click",
   () => {
 
-    if (rendition) {
-
-      rendition.next();
-
-    }
+    rendition.next();
 
   }
 );
@@ -396,11 +386,7 @@ prevPage.addEventListener(
   "click",
   () => {
 
-    if (rendition) {
-
-      rendition.prev();
-
-    }
+    rendition.prev();
 
   }
 );
@@ -411,13 +397,9 @@ increaseFont.addEventListener(
 
     fontSize += 10;
 
-    if (rendition) {
-
-      rendition.themes.fontSize(
-        fontSize + "%"
-      );
-
-    }
+    rendition.themes.fontSize(
+      fontSize + "%"
+    );
 
     localStorage.setItem(
       "fontSize",
@@ -435,13 +417,9 @@ decreaseFont.addEventListener(
 
     fontSize -= 10;
 
-    if (rendition) {
-
-      rendition.themes.fontSize(
-        fontSize + "%"
-      );
-
-    }
+    rendition.themes.fontSize(
+      fontSize + "%"
+    );
 
     localStorage.setItem(
       "fontSize",
@@ -467,7 +445,9 @@ if (
             "./sw.js"
           );
 
-      } catch (error) {
+      }
+
+      catch (error) {
 
         console.error(
           error
