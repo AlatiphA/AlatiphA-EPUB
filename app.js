@@ -211,7 +211,7 @@ function setupSwipeNavigation() {
 
   rendition.on(
     "rendered",
-    section => {
+    () => {
 
       const iframe =
         viewer.querySelector(
@@ -223,7 +223,7 @@ function setupSwipeNavigation() {
       const iframeWindow =
         iframe.contentWindow;
 
-      iframeWindow.onclick =
+      iframeWindow.onpointerup =
         e => {
 
           const width =
@@ -232,25 +232,29 @@ function setupSwipeNavigation() {
           const x =
             e.clientX;
 
-          if (x < width * 0.3) {
+          const leftZone =
+            width * 0.3;
+
+          const rightZone =
+            width * 0.7;
+
+          if (x <= leftZone) {
 
             rendition.prev();
 
+            return;
+
           }
 
-          else if (
-            x > width * 0.7
-          ) {
+          if (x >= rightZone) {
 
             rendition.next();
 
-          }
-
-          else {
-
-            toggleControls();
+            return;
 
           }
+
+          toggleControls();
 
         };
 
