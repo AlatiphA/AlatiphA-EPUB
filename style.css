@@ -238,16 +238,22 @@ button {
   }
 
   .hideControls {
-  opacity: 0;
+  opacity: 0 !important;
 
-  pointer-events: none;
+  pointer-events: none !important;
 
-  transition: opacity 0.3s ease;
-  }
+  visibility: hidden !important;
+}
 
   header,
-  footer {
-    transition: opacity 0.3s ease;
-  }
+footer {
+  transition:
+    opacity 0.3s ease,
+    visibility 0.3s ease;
+
+  position: relative;
+
+  z-index: 9999;
+}
 
 }
