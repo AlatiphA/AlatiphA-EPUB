@@ -267,9 +267,19 @@ const rightZone =
     "rightZone"
   );
 
+function sidebarIsOpen() {
+
+  return sidebar.classList.contains(
+    "active"
+  );
+
+}
+
 leftZone.addEventListener(
   "click",
   e => {
+
+    if (sidebarIsOpen()) return;
 
     e.stopPropagation();
 
@@ -282,6 +292,8 @@ rightZone.addEventListener(
   "click",
   e => {
 
+    if (sidebarIsOpen()) return;
+
     e.stopPropagation();
 
     rendition.next();
@@ -292,6 +304,8 @@ rightZone.addEventListener(
 centerZone.addEventListener(
   "click",
   e => {
+
+    if (sidebarIsOpen()) return;
 
     e.stopPropagation();
 
