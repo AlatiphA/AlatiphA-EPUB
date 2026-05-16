@@ -224,48 +224,29 @@ function setupSwipeNavigation() {
         iframe.contentDocument;
 
       iframeDoc.addEventListener(
-        "touchstart",
+        "click",
         e => {
 
-          touchStartX =
-            e.changedTouches[0]
-              .screenX;
+          const width =
+            window.innerWidth;
 
-        },
-        {
-          passive: true,
-          once: true
-        }
-      );
+          const x =
+            e.clientX;
 
-      iframeDoc.addEventListener(
-        "touchend",
-        e => {
-
-          const touchEndX =
-            e.changedTouches[0]
-              .screenX;
-
-          const difference =
-            touchStartX -
-            touchEndX;
-
-          if (difference > 50) {
-
-            rendition.next();
-
-          }
-
-          if (difference < -50) {
+          if (x < width * 0.3) {
 
             rendition.prev();
 
           }
 
-        },
-        {
-          passive: true,
-          once: true
+          else if (
+            x > width * 0.7
+          ) {
+
+            rendition.next();
+
+          }
+
         }
       );
 
