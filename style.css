@@ -10,6 +10,7 @@ body {
   height: 100%;
 
   overflow: hidden;
+
   font-family: Arial, sans-serif;
 }
 
@@ -32,6 +33,10 @@ body.dark {
   overflow: hidden;
 }
 
+/* =========================
+   HEADER
+========================= */
+
 header {
   position: fixed;
 
@@ -39,9 +44,9 @@ header {
   left: 0;
   right: 0;
 
-  height: 50px;
+  height: 46px;
 
-  background: rgba(20,20,20,0.92);
+  background: rgba(30,30,30,0.92);
 
   display: flex;
   align-items: center;
@@ -61,12 +66,17 @@ header {
 .title {
   color: white;
 
-  font-size: 16px;
-
-  font-weight: bold;
+  font-size: 15px;
 
   font-weight: 600;
-  letter-spacing: 0.3px;
+
+  white-space: nowrap;
+
+  overflow: hidden;
+
+  text-overflow: ellipsis;
+
+  margin: 0 8px;
 }
 
 .iconBtn {
@@ -79,12 +89,24 @@ header {
 
   color: white;
 
-  border-radius: 10px;
-
-  font-size: 18px;
+  font-size: 19px;
 
   cursor: pointer;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 8px;
+
+  transition:
+    background 0.2s ease,
+    transform 0.15s ease;
 }
+
+/* =========================
+   MAIN VIEWER
+========================= */
 
 main {
   position: absolute;
@@ -114,6 +136,10 @@ body.dark #viewer {
   border: none !important;
 }
 
+/* =========================
+   FOOTER
+========================= */
+
 footer {
   position: fixed;
 
@@ -123,7 +149,7 @@ footer {
 
   height: 68px;
 
-  background: rgba(20,20,20,0.96);
+  background: rgba(30,30,30,0.96);
 
   display: flex;
   flex-direction: column;
@@ -140,17 +166,17 @@ footer {
 }
 
 .topFooter {
-  height: 26px;
+  height: 28px;
 
   display: flex;
   align-items: center;
   justify-content: space-between;
 
-  padding: 0 10px;
+  padding: 0 8px;
 }
 
 .bottomFooter {
-  height: 44px;
+  height: 40px;
 
   display: flex;
   align-items: center;
@@ -160,8 +186,8 @@ footer {
 }
 
 .navBtn {
-  width: 28px;
-  height: 28px;
+  width: 26px;
+  height: 26px;
 
   border: none;
 
@@ -169,13 +195,19 @@ footer {
 
   color: #d8d8d8;
 
-  font-size: 18px;
+  font-size: 15px;
 
   cursor: pointer;
 
   display: flex;
   align-items: center;
   justify-content: center;
+
+  border-radius: 6px;
+
+  transition:
+    background 0.2s ease,
+    transform 0.15s ease;
 }
 
 #progressText {
@@ -183,9 +215,9 @@ footer {
 
   font-size: 11px;
 
-  margin: 0 10px;
+  margin: 0 8px;
 
-  min-width: 42px;
+  min-width: 40px;
 
   text-align: center;
 }
@@ -201,7 +233,7 @@ footer {
 
   overflow: hidden;
 
-  margin: 0 10px;
+  margin: 0 8px;
 }
 
 .progressFill {
@@ -213,8 +245,8 @@ footer {
 }
 
 .bottomBtn {
-  width: 34px;
-  height: 34px;
+  width: 30px;
+  height: 30px;
 
   border: none;
 
@@ -222,7 +254,7 @@ footer {
 
   color: #d8d8d8;
 
-  font-size: 18px;
+  font-size: 16px;
 
   cursor: pointer;
 
@@ -231,22 +263,41 @@ footer {
   justify-content: center;
 
   border-radius: 8px;
+
+  transition:
+    background 0.2s ease,
+    transform 0.15s ease;
 }
 
+/* =========================
+   BUTTON EFFECTS
+========================= */
+
+.iconBtn:hover,
+.bottomBtn:hover,
+.navBtn:hover {
+  background: rgba(255,255,255,0.06);
+}
+
+.iconBtn:active,
 .bottomBtn:active,
 .navBtn:active {
-  background: rgba(255,255,255,0.08);
+  transform: scale(0.94);
 }
+
+/* =========================
+   SIDEBAR
+========================= */
 
 .sidebar {
   position: fixed;
 
-  top: 52px;
-  left: -320px;
+  top: 56px;
+  left: -300px;
 
   width: 300px;
 
-  height: calc(100dvh - 52px);
+  height: calc(100dvh - 56px);
 
   background: white;
 
@@ -256,7 +307,7 @@ footer {
 
   z-index: 10000;
 
-  padding: 14px;
+  padding: 15px;
 }
 
 .sidebar.active {
@@ -267,6 +318,10 @@ body.dark .sidebar {
   background: #1e1e1e;
   color: white;
 }
+
+/* =========================
+   CONTROLS
+========================= */
 
 .controls {
   display: flex;
@@ -279,20 +334,25 @@ body.dark .sidebar {
 .controls button {
   flex: 1;
 
-  height: 42px;
+  height: 38px;
 
   border: none;
+
   border-radius: 10px;
 
-  font-size: 16px;
+  font-size: 15px;
 
   cursor: pointer;
 }
 
+/* =========================
+   TOC
+========================= */
+
 #toc a {
   display: block;
 
-  padding: 14px 10px;
+  padding: 12px 10px;
 
   color: inherit;
 
@@ -300,26 +360,20 @@ body.dark .sidebar {
 
   border-bottom: 1px solid #ccc;
 
-  font-size: 15px;
+  font-size: 14px;
 }
 
 #toc a:hover {
-  background: rgba(
-    0,
-    0,
-    0,
-    0.05
-  );
+  background: rgba(0,0,0,0.05);
 }
 
 body.dark #toc a:hover {
-  background: rgba(
-    255,
-    255,
-    255,
-    0.05
-  );
+  background: rgba(255,255,255,0.05);
 }
+
+/* =========================
+   AUTO HIDE
+========================= */
 
 .hideControls {
   opacity: 0 !important;
@@ -334,6 +388,10 @@ header.hideControls {
 footer.hideControls {
   transform: translateY(100%);
 }
+
+/* =========================
+   NAVIGATION OVERLAY
+========================= */
 
 #navOverlay {
   position: absolute;
@@ -365,26 +423,11 @@ button {
   touch-action: manipulation;
 }
 
-@media (max-width: 768px) {
+/* =========================
+   SEARCH MODAL
+========================= */
 
-  .sidebar {
-    width: 85%;
-    left: -85%;
-  }
-
-  .sidebar.active {
-    left: 0;
-  }
-
-  .title {
-    font-size: 16px;
-  }
-
-  .bottomBtn {
-    font-size: 20px;
-  }
-
-  #searchModal {
+#searchModal {
   position: fixed;
 
   inset: 0;
@@ -415,25 +458,25 @@ button {
 #searchInput {
   flex: 1;
 
-  height: 44px;
+  height: 42px;
 
   border: none;
 
   border-radius: 10px;
 
-  padding: 0 15px;
+  padding: 0 14px;
 
-  font-size: 16px;
+  font-size: 15px;
 }
 
 #closeSearch {
-  width: 44px;
+  width: 42px;
 
   border: none;
 
   border-radius: 10px;
 
-  font-size: 18px;
+  font-size: 16px;
 
   cursor: pointer;
 }
@@ -456,6 +499,8 @@ button {
   border-bottom: 1px solid #ddd;
 
   cursor: pointer;
+
+  font-size: 14px;
 }
 
 .searchItem:hover {
@@ -471,5 +516,28 @@ body.dark #searchResults {
 body.dark .searchItem {
   border-color: #333;
 }
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 768px) {
+
+  .sidebar {
+    width: 85%;
+    left: -85%;
+  }
+
+  .sidebar.active {
+    left: 0;
+  }
+
+  .title {
+    font-size: 14px;
+  }
+
+  .bottomBtn {
+    font-size: 16px;
+  }
 
 }
