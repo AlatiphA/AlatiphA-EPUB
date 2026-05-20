@@ -26,7 +26,24 @@ Designed for mobile-first reading with smooth navigation, offline support, dark 
 
 ## Screenshots
 
-Add screenshots here later.
+### Home Screen
+
+<p align="center">
+  <img src="./screenshots/home.png" width="300">
+</p>
+
+### Dark Mode
+
+<p align="center">
+  <img src="./screenshots/dark-mode.png" width="300">
+</p>
+
+### Search
+
+<p align="center">
+  <img src="./screenshots/search.png" width="300">
+</p>
+
 
 ```md
 ![Home](./screenshots/home.png)
