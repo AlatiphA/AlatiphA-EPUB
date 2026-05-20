@@ -29,19 +29,31 @@ Designed for mobile-first reading with smooth navigation, offline support, dark 
 ### Home Screen
 
 <p align="center">
-  <img src="./screenshots/home.png" width="300">
+  <img src="./screenshots/home.jpg" width="300">
 </p>
 
-### Dark Mode
+### Contents 
 
 <p align="center">
-  <img src="./screenshots/dark-mode.png" width="300">
+  <img src="./screenshots/contents.jpg" width="300">
 </p>
 
 ### Search
 
 <p align="center">
-  <img src="./screenshots/search.png" width="300">
+  <img src="./screenshots/search.jpg" width="300">
+</p>
+
+### Dark Mode
+
+<p align="center">
+  <img src="./screenshots/dark-mode.jpg" width="300">
+</p>
+
+### Full Mode
+
+<p align="center">
+  <img src="./screenshots/full-mode.jpg" width="300">
 </p>
 
 
