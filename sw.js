@@ -1,4 +1,4 @@
-const CACHE_NAME = "epub-reader-v6";
+const CACHE_NAME = "alatipha-gespasco-v1";
 
 const FILES_TO_CACHE = [
 
