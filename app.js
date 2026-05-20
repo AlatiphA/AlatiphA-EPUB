@@ -137,7 +137,7 @@ let controlsVisible =
 let fontSize =
   Number(
     localStorage.getItem(
-      "fontSize"
+      "gespasco-fontSize"
     )
   ) || 100;
 
@@ -196,7 +196,7 @@ function startReader() {
 
   const savedLocation =
     localStorage.getItem(
-      "epub-location"
+      "gespasco-location"
     );
 
   rendition.display(
@@ -285,7 +285,7 @@ function startReader() {
           percent + "%";
 
         localStorage.setItem(
-          "epub-location",
+          "gespasco-location",
           location.start.cfi
         );
 
@@ -502,7 +502,7 @@ function applyTheme() {
 
   const darkMode =
     localStorage.getItem(
-      "darkMode"
+      "gespasco-darkMode"
     ) === "true";
 
   document.body.classList.toggle(
@@ -740,11 +740,11 @@ themeBtn.addEventListener(
 
     const darkMode =
       localStorage.getItem(
-        "darkMode"
+        "gespasco-darkMode"
       ) === "true";
 
     localStorage.setItem(
-      "darkMode",
+      "gespasco-darkMode",
       !darkMode
     );
 
@@ -782,7 +782,7 @@ increaseFont.addEventListener(
     );
 
     localStorage.setItem(
-      "fontSize",
+      "gespasco-fontSize",
       fontSize
     );
 
@@ -803,7 +803,7 @@ decreaseFont.addEventListener(
     );
 
     localStorage.setItem(
-      "fontSize",
+      "gespasco-fontSize",
       fontSize
     );
 
@@ -925,7 +925,7 @@ if (
         await navigator
           .serviceWorker
           .register(
-            "./sw.js"
+            "./sw-gespasco.js"
           );
 
       }
