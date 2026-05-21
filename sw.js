@@ -1,5 +1,5 @@
 const CACHE_NAME =
-  "alatipha-gespasco-v4";
+  "alatipha-gespasco-v5";
 
 const FILES_TO_CACHE = [
 
