@@ -925,7 +925,7 @@ if (
         await navigator
           .serviceWorker
           .register(
-            "./sw-gespasco.js"
+            "./sw.js"
           );
 
       }
