@@ -1,72 +1,118 @@
-const CACHE_NAME = "alatipha-gespasco-v3";
+const CACHE_NAME =
+  "alatipha-gespasco-v4";
 
 const FILES_TO_CACHE = [
 
   "./",
-  "./index.html",
+  "./index-gespasco.html",
   "./style.css",
   "./app.js",
   "./manifest.json",
+  "./icon-192.png",
+  "./icon-512.png",
   "./library/sample.epub"
 
 ];
 
-self.addEventListener("install", event => {
+/* =========================
+   INSTALL
+========================= */
 
-  event.waitUntil(
+self.addEventListener(
+  "install",
+  event => {
 
-    caches.open(CACHE_NAME)
-      .then(cache => {
+    event.waitUntil(
 
-        return cache.addAll(
-          FILES_TO_CACHE
-        );
+      caches.open(
+        CACHE_NAME
+      ).then(
+        cache => {
 
-      })
+          return cache.addAll(
+            FILES_TO_CACHE
+          );
 
-  );
+        }
+      )
 
-});
+    );
 
-self.addEventListener("activate", event => {
+    self.skipWaiting();
 
-  event.waitUntil(
+  }
+);
 
-    caches.keys()
-      .then(cacheNames => {
+/* =========================
+   ACTIVATE
+========================= */
 
-        return Promise.all(
+self.addEventListener(
+  "activate",
+  event => {
 
-          cacheNames.map(cache => {
+    event.waitUntil(
 
-            if (cache !== CACHE_NAME) {
+      caches.keys().then(
+        cacheNames => {
 
-              return caches.delete(cache);
+          return Promise.all(
 
-            }
+            cacheNames.map(
+              cache => {
 
-          })
+                if (
+                  cache !==
+                  CACHE_NAME
+                ) {
 
-        );
+                  return caches.delete(
+                    cache
+                  );
 
-      })
+                }
 
-  );
+              }
+            )
 
-});
+          );
 
-self.addEventListener("fetch", event => {
+        }
+      )
 
-  event.respondWith(
+    );
 
-    caches.match(event.request)
-      .then(response => {
+    self.clients.claim();
 
-        return response ||
-          fetch(event.request);
+  }
+);
 
-      })
+/* =========================
+   FETCH
+========================= */
 
-  );
+self.addEventListener(
+  "fetch",
+  event => {
 
-});
+    event.respondWith(
+
+      caches.match(
+        event.request
+      ).then(
+        response => {
+
+          return (
+            response ||
+            fetch(
+              event.request
+            )
+          );
+
+        }
+      )
+
+    );
+
+  }
+);
