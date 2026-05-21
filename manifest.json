@@ -1,7 +1,7 @@
 {
   "name": "AlatiphA GES Pasco",
   "short_name": "GES Pasco",
-  "start_url": "./",
+  "start_url": "./index.html"
   "scope": "./",
   "display": "standalone",
   "background_color": "#111111",
