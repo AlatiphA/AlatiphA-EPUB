@@ -4,7 +4,7 @@ const CACHE_NAME =
 const FILES_TO_CACHE = [
 
   "./",
-  "./index-gespasco.html",
+  "./index.html",
   "./style.css",
   "./app.js",
   "./manifest.json",
