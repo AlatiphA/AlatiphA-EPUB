@@ -743,9 +743,9 @@ themeBtn.addEventListener(
         "gespasco-darkMode"
       ) === "true";
 
-    localStorage.setItem(
-      "gespasco-darkMode",
-      !darkMode
+      localStorage.setItem(
+        "gespasco-darkMode",
+      (!darkMode).toString()
     );
 
     applyTheme();
